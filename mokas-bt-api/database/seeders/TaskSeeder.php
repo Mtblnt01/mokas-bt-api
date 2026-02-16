@@ -12,6 +12,20 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Task::factory()->count(3)->create();
+        $tasks = [
+            [
+                'title' => 'Helszín foglalás',
+
+            ],
+            [
+                'title' => 'Egyeztetés',
+                'description' => 'Igazgatóval megbeszélés',
+                'status' => 'folyamatban',
+            ]
+        ];
+        foreach ($tasks as $task) {
+            Task::create($task);
+        }
     }
 }
