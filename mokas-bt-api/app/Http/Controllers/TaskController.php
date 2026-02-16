@@ -20,23 +20,37 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'required|in:függőben,folyamatban,befejezett',
+        ]);
+        $task = Task::create($validated);
+        return response()->json($task, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    public function show($id)
     {
-        //
+        $task = Task::findOrFail($id);
+        return response()->json($task, 200);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request, $id)
     {
-        //
+        $task = Task::findOrFail($id);
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'status' => 'required|in:függőben,folyamatban,befejezett',
+        ]);
+        $task->update($validated);
+        return response()->json($task, 200);
     }
 
     /**
@@ -44,6 +58,7 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        Task::destroy($task->id);
+        return response()->json(['message' => 'Task törölve'], 200);
     }
 }
